@@ -11,6 +11,7 @@ import time
 import os
 import numpy as np
 import random
+import argparse
 
 # openai.api_key = "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"
 openai.api_base = "https://api.lmtchina.com/v1"
@@ -359,6 +360,12 @@ def evaluate(data):
 
 if __name__ == '__main__':
     
+    parser = argparse.ArgumentParser(description='Chinese Text Classification')
+    parser.add_argument('--shot', type=int, default=False, required=True, help='shot number, restricted in 0, 4, 8, 16, 32, 64, 128, 256')
+    parser.add_argument('--run', type=bool, default=False, required=False, help='run')
+    parser.add_argument('--evaluate', type=bool, required=False, help='evaluate')
+    args = parser.parse_args()
+
     train_file = 'sharc1-official/json/sharc_train.json'
     data_path = 'sharc1-official/json/sharc_dev.json'
     model_class = ['gpt-3.5-turbo', 'llama', 'gpt-4-1106-preview']
@@ -371,9 +378,9 @@ if __name__ == '__main__':
     #     print(i, shots[i])
     #     add_example(shots[i])
     
-    run = True
+    run = args.run
     # form input
-    shot = shot = shots[2]
+    shot = args.shot
     model_name = model_class[2]
     
     if run:
@@ -452,7 +459,7 @@ if __name__ == '__main__':
             #         json.dump(outputs, f1)
             #     f1.close()
     
-    evaluation = True
+    evaluation = args.evaluate
     if evaluation:
         if model_name == model_class[1]:
             use_70 = False
